@@ -1,0 +1,209 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:renderers="using:Xam.Uwp.Shell.Renderer"
+    xmlns:xamlControls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:forms="using:Xamarin.Forms"
+    xmlns:converters="using:Xam.Uwp.Shell.Renderer.Converters"
+    xmlns:xamarinUwp="using:Xamarin.Forms.Platform.UWP"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:templateselectors="using:Xam.Uwp.Shell.Renderer.TemplateSelectors">
+
+    <converters:ShellToMenuItemsSourceConverter x:Key="ShellToMenuItemsSourceConverter"/>
+    <converters:IconImageSourceConverter x:Key="IconImageSourceConverter"/>
+    <converters:SearchBoxVisibilityConverter x:Key="SearchBoxVisibilityConverter"/>
+    <converters:SearchBoxIconConverter x:Key="SearchBoxIconConverter"/>
+    <converters:ShellContentItemsCountToVisibilityConvert x:Key="ShellContentItemsCountToVisibilityConvert"/>
+
+    <DataTemplate x:Key="ShellFlyoutBaseShellItemTemplate">
+        <xamlControls:NavigationViewItem Content="{Binding Title}" Icon="{Binding FlyoutIcon, Converter={StaticResource IconImageSourceConverter}}" />
+    </DataTemplate>
+    <DataTemplate x:Key="ShellFlyoutMenuItemTemplate">
+        <xamlControls:NavigationViewItem Content="{Binding Text}" Icon="{Binding Icon, Converter={StaticResource IconImageSourceConverter}}" />
+    </DataTemplate>
+    <DataTemplate x:Key="ShellFlyoutSeparatorTemplate">
+        <xamlControls:NavigationViewItemSeparator />
+    </DataTemplate> 
+    <DataTemplate x:Key="ShellSectionMenuItemTemplate">
+        <xamlControls:NavigationViewItem Content="{Binding Title}"/>
+    </DataTemplate>
+
+    <templateselectors:ShellFlyoutTemplateSelector x:Key="ShellFlyoutTemplateSelector"
+                                                   BaseShellItemTemplate="{StaticResource ShellFlyoutBaseShellItemTemplate}"
+                                                   MenuItemTemplate="{StaticResource ShellFlyoutMenuItemTemplate}"
+                                                   SeparatorTemplate="{StaticResource ShellFlyoutSeparatorTemplate}"/>
+
+    <Style TargetType="renderers:CustomShellRenderer">
+        <Style.Setters>
+            <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundAccentBrush}"></Setter>
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundChromeWhiteBrush}"></Setter>
+            <Setter Property="TitleForeground" Value="{ThemeResource SystemControlForegroundChromeWhiteBrush}"></Setter>
+            <Setter Property="UnselectedColor" Value="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"></Setter>
+            <Setter Property="DisabledColor" Value="{ThemeResource SystemControlDisabledChromeDisabledLowBrush}"></Setter>
+            <Setter Property="TabBarBackground" Value="{ThemeResource SystemControlBackgroundAccentBrush}"></Setter>
+            <Setter Property="TabBarForeground" Value="{ThemeResource SystemControlForegroundChromeWhiteBrush}"></Setter>
+            <Setter Property="TabBarUnselectedColor" Value="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"></Setter>
+            <Setter Property="TabBarTitleForeground" Value="{ThemeResource SystemControlForegroundChromeWhiteBrush}"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="renderers:CustomShellRenderer">
+
+                        <Grid x:Name="Root" Background="{TemplateBinding Background}">
+
+                            <xamlControls:NavigationView x:Name="ShellNavigationView" 
+                                                         MenuItemTemplateSelector="{StaticResource ShellFlyoutTemplateSelector}"
+                                                        MenuItemsSource="{Binding Shell, Converter={StaticResource ShellToMenuItemsSourceConverter}, RelativeSource={RelativeSource TemplatedParent}}"
+                                                        SelectedItem="{Binding CurrentShellItem, RelativeSource={RelativeSource TemplatedParent}}">
+
+                                <xamlControls:NavigationView.Resources>
+                                    <Thickness x:Key="NavigationViewHeaderMargin">0,0,0,0</Thickness>
+                                    <Thickness x:Key="NavigationViewMinimalHeaderMargin">0,0,0,0</Thickness>
+                                    <Thickness x:Key="NavigationViewPaneTitlePresenterMargin">8,40,0,0</Thickness>
+                                </xamlControls:NavigationView.Resources>
+
+
+                                <interactivity:Interaction.Behaviors>
+                                    <core:EventTriggerBehavior EventName="ItemInvoked">
+                                        <core:InvokeCommandAction Command="{Binding NavigationViewItemInvokedCommand, RelativeSource={RelativeSource TemplatedParent}}"></core:InvokeCommandAction>
+                                    </core:EventTriggerBehavior>
+                                </interactivity:Interaction.Behaviors>
+
+                                <xamlControls:NavigationView.Header>
+                                    <Grid x:Name="HeaderArea" Padding="16 0 3 0">
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Style="{StaticResource TitleTextBlockStyle}" Foreground="{TemplateBinding TitleForeground}" TextLineBounds="Tight"
+                                               VerticalAlignment="Center"
+                                               Text="{Binding CurrentPage.Title, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                                        <CommandBar Grid.Column="1" x:Name="HeaderCommandBar"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                DefaultLabelPosition="Right"
+                                                IsDynamicOverflowEnabled="True"
+                                                FontSize="14"
+                                                Background="{TemplateBinding Background}"
+                                                Foreground="{TemplateBinding Foreground}">
+                                        </CommandBar>
+
+                                    </Grid>
+                                </xamlControls:NavigationView.Header>
+
+                                <Grid>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Border Grid.Row="0"
+                                        Visibility="{Binding Shell.CurrentItem.CurrentItem.Items.Count, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ShellContentItemsCountToVisibilityConvert}}">
+
+                                        <renderers:HorizontalScrollLoopListBox x:Name="TabBar" SelectionMode="Single"
+                                                                          ItemsSource="{Binding CurrentShellItemSection.Items, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                          DisplayMemberPath="Title"
+                                                                          SelectedItem="{Binding CurrentShellItemSectionContent, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
+                                                                          ItemContainerStyle="{StaticResource PivotLikeListBoxItemStyle}">
+                                            <!--SelectedItem="{Binding CurrentShellItemSectionContent, RelativeSource={RelativeSource TemplatedParent}}"-->
+
+                                            <interactivity:Interaction.Behaviors>
+                                                <core:EventTriggerBehavior EventName="SelectionChanged">
+                                                    <core:InvokeCommandAction Command="{Binding TabBarSelectionChangedCommand, RelativeSource={RelativeSource TemplatedParent}}"></core:InvokeCommandAction>
+                                                </core:EventTriggerBehavior>
+                                            </interactivity:Interaction.Behaviors>
+                                        </renderers:HorizontalScrollLoopListBox>
+                                    </Border>
+
+                                    <Border Grid.Row="1">
+                                        <AutoSuggestBox x:Name="AutoSuggestBox"
+                                                    PlaceholderText="{Binding CurrentPageSearchHandler.Placeholder, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    IsEnabled="{Binding CurrentPageSearchHandler.IsSearchEnabled, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    ItemsSource="{Binding CurrentPageSearchHandler.ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    Text="{Binding CurrentPageSearchHandler.Query, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    Visibility="{Binding CurrentPageSearchHandler.SearchBoxVisibility, RelativeSource={RelativeSource TemplatedParent}, TargetNullValue=Collapsed, FallbackValue=Collapsed, Converter={StaticResource SearchBoxVisibilityConverter}}"
+                                                    QueryIcon="{Binding CurrentPageSearchHandler.QueryIcon, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource SearchBoxIconConverter}}"
+                                                    HorizontalAlignment="Stretch"
+                                                    MaxWidth="900"
+                                                    Margin="16 4">
+                                            <interactivity:Interaction.Behaviors>
+                                                <core:EventTriggerBehavior EventName="TextChanged">
+                                                    <core:InvokeCommandAction Command="{Binding SearchBoxTextChangedCommand, RelativeSource={RelativeSource TemplatedParent}}"></core:InvokeCommandAction>
+                                                </core:EventTriggerBehavior>
+                                                <core:EventTriggerBehavior EventName="QuerySubmitted">
+                                                    <core:InvokeCommandAction Command="{Binding SearchBoxQuerySubmittedCommand, RelativeSource={RelativeSource TemplatedParent}}"></core:InvokeCommandAction>
+                                                </core:EventTriggerBehavior>
+                                                <core:EventTriggerBehavior EventName="SuggestionChosen">
+                                                    <core:InvokeCommandAction Command="{Binding SearchBoxSuggestionChosenCommand, RelativeSource={RelativeSource TemplatedParent}}"></core:InvokeCommandAction>
+                                                </core:EventTriggerBehavior>
+                                            </interactivity:Interaction.Behaviors>
+                                        </AutoSuggestBox>
+                                    </Border>
+
+                                    <ContentPresenter x:Name="ContentPresenter" Grid.Row="2">
+
+                                        <ContentPresenter.Transitions>
+                                            <TransitionCollection>
+                                                <!--<EntranceThemeTransition FromHorizontalOffset="0" FromVerticalOffset="80"></EntranceThemeTransition>-->
+                                                <!--<EdgeUIThemeTransition Edge="Bottom" ></EdgeUIThemeTransition>-->
+                                            </TransitionCollection>
+                                        </ContentPresenter.Transitions>
+
+                                        <ContentPresenter.ContentTransitions>
+                                            <TransitionCollection>
+                                                <!--<EntranceThemeTransition FromHorizontalOffset="0" FromVerticalOffset="80"></EntranceThemeTransition>-->
+                                                <!--<EdgeUIThemeTransition Edge="Bottom" ></EdgeUIThemeTransition>-->
+                                            </TransitionCollection>
+                                        </ContentPresenter.ContentTransitions>
+
+                                        <interactivity:Interaction.Behaviors>
+                                            <core:EventTriggerBehavior EventName="SizeChanged">
+                                                <core:InvokeCommandAction Command="{Binding SizeChangedCommand, RelativeSource={RelativeSource TemplatedParent}}"></core:InvokeCommandAction>
+                                            </core:EventTriggerBehavior>
+                                        </interactivity:Interaction.Behaviors>
+                                    </ContentPresenter>
+
+                                    <Border x:Name="BottomArea" Grid.Row="3" Background="{TemplateBinding TabBarBackground}">
+                                        <ItemsControl x:Name="TabBarButtons" HorizontalAlignment="Center" 
+                                                  DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                                  ItemsSource="{Binding CurrentShellItem.Items, RelativeSource={RelativeSource TemplatedParent}}">
+
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <AppBarButton Label="{Binding Title}" 
+                                                              Icon="{Binding Icon, Converter={StaticResource IconImageSourceConverter}}"
+                                                              IsEnabled="{Binding IsEnabled}"
+                                                              Foreground="{Binding DataContext.TabBarUnselectedColor, ElementName=TabBarButtons}"
+                                                              Command="{Binding DataContext.ShellSectionCommand, ElementName=TabBarButtons}"
+                                                              CommandParameter="{Binding}">
+                                                    </AppBarButton>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Border>
+                                </Grid>
+
+                            </xamlControls:NavigationView>
+
+                            <TextBlock x:Name="AppTitle" Style="{StaticResource CaptionTextBlockStyle}" IsHitTestVisible="False"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style.Setters>
+    </Style>
+
+
+</ResourceDictionary>

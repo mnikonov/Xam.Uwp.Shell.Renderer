@@ -1,0 +1,8 @@
+.vs/
+*.DotSettings
+Example.Uwp/bin/
+Example.Uwp/obj/
+Example/obj/
+Example/bin/
+Xam.Uwp.Shell.Renderer/bin/
+Xam.Uwp.Shell.Renderer/obj/
