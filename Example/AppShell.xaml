@@ -30,14 +30,61 @@
     </Shell.Resources>
 
     <!-- Your Pages -->
-    <TabBar>
+    <!--<TabBar>
         <Tab Title="Browse" Icon="tab_feed.png">
             <ShellContent ContentTemplate="{DataTemplate local:ItemsPage}" />
         </Tab>
         <Tab Title="About" Icon="tab_about.png">
             <ShellContent ContentTemplate="{DataTemplate local:AboutPage}" />
         </Tab>
-    </TabBar>
+    </TabBar>-->
+
+    <ShellItem Title="Shell Item 1" Route="ShellItem1">
+
+        <ShellItem.Icon>
+            <FileImageSource File="tab_feed.png"></FileImageSource>
+        </ShellItem.Icon>
+
+        <ShellSection Title="Browse" Route="Browse">
+            <ShellSection.Icon>
+                <FileImageSource File="tab_feed.png"></FileImageSource>
+            </ShellSection.Icon>
+            <ShellContent ContentTemplate="{DataTemplate local:ItemsPage}" Route="ItemsPage" />
+        </ShellSection>
+        <ShellSection Title="About" Route="About">
+            <ShellSection.Icon>
+                <FileImageSource File="tab_about.png"></FileImageSource>
+            </ShellSection.Icon>
+
+            <ShellContent Title="About 1" ContentTemplate="{DataTemplate local:AboutPage}" Route="AboutPage" >
+                <ShellContent.Icon>
+                    <FileImageSource File="tab_about.png"></FileImageSource>
+                </ShellContent.Icon>
+            </ShellContent>
+            <ShellContent Title="About 2" ContentTemplate="{DataTemplate local:AboutPage}" Route="AboutPage2" />
+        </ShellSection>
+    </ShellItem>
+    <ShellItem Title="Shell Item 2">
+
+        <ShellItem.Icon>
+            <FileImageSource File="tab_about.png"></FileImageSource>
+        </ShellItem.Icon>
+
+        <ShellSection Title="About">
+
+            <ShellSection.Icon>
+                <FileImageSource File="tab_feed.png"></FileImageSource>
+            </ShellSection.Icon>
+
+            <ShellContent Title="About 1" ContentTemplate="{DataTemplate local:AboutPage}" />
+            <ShellContent Title="About 2" ContentTemplate="{DataTemplate local:AboutPage}">
+                <ShellContent.Icon>
+                    <FileImageSource File="tab_about.png"></FileImageSource>
+                </ShellContent.Icon>
+            </ShellContent>
+        </ShellSection>
+    </ShellItem>
+
 
     <!-- Optional Templates 
     // These may be provided inline as below or as separate classes.

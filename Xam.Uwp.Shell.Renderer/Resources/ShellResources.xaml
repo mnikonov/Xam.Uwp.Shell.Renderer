@@ -43,15 +43,15 @@
             <Setter Property="DisabledColor" Value="{ThemeResource SystemControlDisabledChromeDisabledLowBrush}"></Setter>
             <Setter Property="TabBarBackground" Value="{ThemeResource SystemControlBackgroundAccentBrush}"></Setter>
             <Setter Property="TabBarForeground" Value="{ThemeResource SystemControlForegroundChromeWhiteBrush}"></Setter>
-            <Setter Property="TabBarUnselectedColor" Value="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"></Setter>
+            <Setter Property="TabBarUnselectedColor" Value="{ThemeResource SystemControlBackgroundBaseMediumHighBrush}"></Setter>
             <Setter Property="TabBarTitleForeground" Value="{ThemeResource SystemControlForegroundChromeWhiteBrush}"></Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="renderers:CustomShellRenderer">
 
-                        <Grid x:Name="Root" Background="{TemplateBinding Background}">
+                        <Grid x:Name="Root">
 
-                            <xamlControls:NavigationView x:Name="ShellNavigationView" 
+                            <xamlControls:NavigationView x:Name="ShellNavigationView"
                                                          MenuItemTemplateSelector="{StaticResource ShellFlyoutTemplateSelector}"
                                                         MenuItemsSource="{Binding Shell, Converter={StaticResource ShellToMenuItemsSourceConverter}, RelativeSource={RelativeSource TemplatedParent}}"
                                                         SelectedItem="{Binding CurrentShellItem, RelativeSource={RelativeSource TemplatedParent}}">
@@ -70,7 +70,7 @@
                                 </interactivity:Interaction.Behaviors>
 
                                 <xamlControls:NavigationView.Header>
-                                    <Grid x:Name="HeaderArea" Padding="16 0 3 0">
+                                    <Grid x:Name="HeaderArea" Padding="16 0 3 0" Background="{TemplateBinding Background}">
 
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -104,7 +104,8 @@
                                     </Grid.RowDefinitions>
 
                                     <Border Grid.Row="0"
-                                        Visibility="{Binding Shell.CurrentItem.CurrentItem.Items.Count, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ShellContentItemsCountToVisibilityConvert}}">
+                                        Visibility="{Binding Shell.CurrentItem.CurrentItem.Items.Count, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ShellContentItemsCountToVisibilityConvert}}"
+                                        Background="{TemplateBinding Background}">
 
                                         <renderers:HorizontalScrollLoopListBox x:Name="TabBar" SelectionMode="Single"
                                                                           ItemsSource="{Binding CurrentShellItemSection.Items, RelativeSource={RelativeSource TemplatedParent}}"
@@ -121,7 +122,7 @@
                                         </renderers:HorizontalScrollLoopListBox>
                                     </Border>
 
-                                    <Border Grid.Row="1">
+                                    <Border Grid.Row="1" Background="{TemplateBinding Background}">
                                         <AutoSuggestBox x:Name="AutoSuggestBox"
                                                     PlaceholderText="{Binding CurrentPageSearchHandler.Placeholder, RelativeSource={RelativeSource TemplatedParent}}"
                                                     IsEnabled="{Binding CurrentPageSearchHandler.IsSearchEnabled, RelativeSource={RelativeSource TemplatedParent}}"
@@ -148,17 +149,8 @@
 
                                     <ContentPresenter x:Name="ContentPresenter" Grid.Row="2">
 
-                                        <ContentPresenter.Transitions>
-                                            <TransitionCollection>
-                                                <!--<EntranceThemeTransition FromHorizontalOffset="0" FromVerticalOffset="80"></EntranceThemeTransition>-->
-                                                <!--<EdgeUIThemeTransition Edge="Bottom" ></EdgeUIThemeTransition>-->
-                                            </TransitionCollection>
-                                        </ContentPresenter.Transitions>
-
                                         <ContentPresenter.ContentTransitions>
                                             <TransitionCollection>
-                                                <!--<EntranceThemeTransition FromHorizontalOffset="0" FromVerticalOffset="80"></EntranceThemeTransition>-->
-                                                <!--<EdgeUIThemeTransition Edge="Bottom" ></EdgeUIThemeTransition>-->
                                             </TransitionCollection>
                                         </ContentPresenter.ContentTransitions>
 

@@ -4,10 +4,10 @@
     xmlns:renderers="using:Xam.Uwp.Shell.Renderer">
 
     <SolidColorBrush x:Key="TabBarForegroundUnselected" Color="{ThemeResource SystemBaseMediumColor}"></SolidColorBrush>
-    <SolidColorBrush x:Key="TabBarForegroundUnselectedPointerOver" Color="{ThemeResource SystemBaseMediumHighColor}"></SolidColorBrush>
-    <SolidColorBrush x:Key="TabBarForegroundDisabled" Color="{ThemeResource SystemBaseMediumLowColor}"></SolidColorBrush>
+    <SolidColorBrush x:Key="TabBarForegroundUnselectedPointerOver" Color="{ThemeResource SystemBaseHighColor}"></SolidColorBrush>
+    <SolidColorBrush x:Key="TabBarForegroundDisabled" Color="{ThemeResource SystemBaseMediumColor}"></SolidColorBrush>
     <SolidColorBrush x:Key="TabBarForegroundSelected" Color="{ThemeResource SystemBaseHighColor}"></SolidColorBrush>
-    <SolidColorBrush x:Key="TabBarForegroundSelectedPointerOver" Color="{ThemeResource SystemBaseMediumColor}"></SolidColorBrush>
+    <SolidColorBrush x:Key="TabBarForegroundSelectedPointerOver" Color="{ThemeResource SystemBaseHighColor}"></SolidColorBrush>
     <SolidColorBrush x:Key="TabBarSelectionHighlight" Color="{ThemeResource SystemBaseHighColor}"></SolidColorBrush>
 
     <Style x:Key="NextButtonStyle" TargetType="RepeatButton">
