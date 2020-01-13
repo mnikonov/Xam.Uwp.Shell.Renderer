@@ -13,8 +13,8 @@
     <StartupObject />
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
-  <Import Project="..\..\..\..\UWPShell.Sample\Xamarin.Forms\.nuspec\Xamarin.Forms.DefaultItems.props" />
-  <Import Project="..\..\..\..\UWPShell.Sample\Xamarin.Forms\.nuspec\Xamarin.Forms.DefaultItems.targets" />
+  <Import Project="..\Xamarin.Forms\.nuspec\Xamarin.Forms.DefaultItems.props" />
+  <Import Project="..\Xamarin.Forms\.nuspec\Xamarin.Forms.DefaultItems.targets" />
 
 
   <ItemGroup>  
@@ -22,12 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference ReferenceOutputAssembly="False" Include="..\..\..\..\UWPShell.Sample\Xamarin.Forms\Xamarin.Forms.Build.Tasks\Xamarin.Forms.Build.Tasks.csproj" />
-    <ProjectReference Include="..\..\..\..\UWPShell.Sample\Xamarin.Forms\Xamarin.Forms.Core\Xamarin.Forms.Core.csproj" />
-    <ProjectReference Include="..\..\..\..\UWPShell.Sample\Xamarin.Forms\Xamarin.Forms.Platform\Xamarin.Forms.Platform.csproj" />
-    <ProjectReference Include="..\..\..\..\UWPShell.Sample\Xamarin.Forms\Xamarin.Forms.Xaml\Xamarin.Forms.Xaml.csproj" />
+    <ProjectReference ReferenceOutputAssembly="False" Include="..\Xamarin.Forms\Xamarin.Forms.Build.Tasks\Xamarin.Forms.Build.Tasks.csproj" />
+    <ProjectReference Include="..\Xamarin.Forms\Xamarin.Forms.Core\Xamarin.Forms.Core.csproj" />
+    <ProjectReference Include="..\Xamarin.Forms\Xamarin.Forms.Platform\Xamarin.Forms.Platform.csproj" />
+    <ProjectReference Include="..\Xamarin.Forms\Xamarin.Forms.Xaml\Xamarin.Forms.Xaml.csproj" />
   </ItemGroup>
   
    <!-- Settings to make it work with project refs -->
-  <Import Project="..\..\..\..\UWPShell.Sample\Xamarin.Forms\.nuspec\Xamarin.Forms.targets" />
+  <Import Project="..\Xamarin.Forms\.nuspec\Xamarin.Forms.targets" />
 </Project>

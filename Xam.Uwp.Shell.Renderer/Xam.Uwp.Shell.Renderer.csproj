@@ -141,9 +141,6 @@
     <EmbeddedResource Include="Properties\Xam.Uwp.Shell.Renderer.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.9</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
       <Version>2.0.1</Version>
     </PackageReference>
@@ -163,11 +160,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\UWPShell.Sample\Xamarin.Forms\Xamarin.Forms.Core\Xamarin.Forms.Core.csproj">
+    <ProjectReference Include="..\Xamarin.Forms\Xamarin.Forms.Core\Xamarin.Forms.Core.csproj">
       <Project>{d84d8feb-b526-453b-95a3-d262d8372ca0}</Project>
       <Name>Xamarin.Forms.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\UWPShell.Sample\Xamarin.Forms\Xamarin.Forms.Platform.UAP\Xamarin.Forms.Platform.UAP.csproj">
+    <ProjectReference Include="..\Xamarin.Forms\Xamarin.Forms.Platform.UAP\Xamarin.Forms.Platform.UAP.csproj">
       <Project>{bd90cb3c-a239-4950-ae91-719016fa074b}</Project>
       <Name>Xamarin.Forms.Platform.UAP</Name>
     </ProjectReference>
