@@ -6,6 +6,19 @@
              mc:Ignorable="d"
              x:Class="Example.App">
     <Application.Resources>
-        
+        <ResourceDictionary>
+            <Color x:Key="NavigationPrimary">#2196F3</Color>
+            <Style x:Key="ShellStyle" TargetType="Shell">
+                <Setter Property="BackgroundColor" Value="{StaticResource NavigationPrimary}" />
+                <Setter Property="ForegroundColor" Value="White" />
+                <Setter Property="TitleColor" Value="White" />
+                <Setter Property="DisabledColor" Value="#B4FFFFFF" />
+                <Setter Property="UnselectedColor" Value="#95FFFFFF" />
+                <Setter Property="TabBarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
+                <Setter Property="TabBarForegroundColor" Value="White"/>
+                <Setter Property="TabBarUnselectedColor" Value="#95FFFFFF"/>
+                <Setter Property="TabBarTitleColor" Value="White"/>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

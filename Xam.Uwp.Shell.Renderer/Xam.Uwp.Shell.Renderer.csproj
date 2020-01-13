@@ -147,9 +147,6 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
       <Version>2.0.1</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms">
-      <Version>4.4.0.991477</Version>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Resources\HorizontalScrollLoopListBoxResources.xaml">
@@ -164,6 +161,16 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\UWPShell.Sample\Xamarin.Forms\Xamarin.Forms.Core\Xamarin.Forms.Core.csproj">
+      <Project>{d84d8feb-b526-453b-95a3-d262d8372ca0}</Project>
+      <Name>Xamarin.Forms.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\UWPShell.Sample\Xamarin.Forms\Xamarin.Forms.Platform.UAP\Xamarin.Forms.Platform.UAP.csproj">
+      <Project>{bd90cb3c-a239-4950-ae91-719016fa074b}</Project>
+      <Name>Xamarin.Forms.Platform.UAP</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
