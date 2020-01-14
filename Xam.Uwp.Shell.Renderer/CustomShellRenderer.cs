@@ -140,6 +140,10 @@ namespace Xam.Uwp.Shell.Renderer
 
         private readonly IconImageSourceConverter iconImageSourceConverter = new IconImageSourceConverter();
 
+        private FlyoutBehavior? currentFlyoutBehavior;
+
+        private bool isPaneClosingLocked = false;
+
         #endregion
 
         #region Constructors
@@ -409,7 +413,8 @@ namespace Xam.Uwp.Shell.Renderer
                     this.TitleForeground.ChangeBrushColor(titleColor);
 
                     titleColor.ApplyToResource("TabBarForegroundSelected");
-                    titleColor.ChangeColorContrast(80).ApplyToResource("TabBarForegroundSelectedPointerOver");
+                    titleColor.ApplyToResource("TabBarForegroundSelectedPointerOver");
+                    titleColor.ApplyToResource("TabBarForegroundUnselectedPointerOver");
                 }
 
                 if (!appearance.DisabledColor.IsDefault)
@@ -426,7 +431,6 @@ namespace Xam.Uwp.Shell.Renderer
                     this.UnselectedColor.ChangeBrushColor(unselectedColor);
 
                     unselectedColor.ApplyToResource("TabBarForegroundUnselected");
-                    unselectedColor.ChangeColorContrast(80).ApplyToResource("TabBarForegroundUnselectedPointerOver");
                 }
 
                 if (!appearance.TabBarBackgroundColor.IsDefault)
@@ -454,42 +458,55 @@ namespace Xam.Uwp.Shell.Renderer
 
             if (this.Background != null)
             {
-                titleBar.BackgroundColor = titleBar.ButtonBackgroundColor = titleBar.ButtonInactiveBackgroundColor = ((SolidColorBrush)this.Background).Color;
-                titleBar.ButtonHoverBackgroundColor = ((SolidColorBrush)this.Background).Color.ChangeColorContrast(80);
-                titleBar.ButtonPressedBackgroundColor = ((SolidColorBrush)this.Background).Color.ChangeColorContrast(60);
+                var color = ((SolidColorBrush)this.Background).Color;
+                titleBar.BackgroundColor = titleBar.ButtonBackgroundColor = titleBar.InactiveBackgroundColor = titleBar.ButtonInactiveBackgroundColor = color;
+                titleBar.ButtonHoverBackgroundColor = color.ChangeColorContrast(80);
+                titleBar.ButtonPressedBackgroundColor = color.ChangeColorContrast(60);
             }
 
             if (this.Foreground != null)
             {
-                titleBar.ForegroundColor = titleBar.ButtonForegroundColor = titleBar.ButtonHoverForegroundColor = titleBar.ButtonPressedForegroundColor = ((SolidColorBrush)this.Foreground).Color;
-                titleBar.ButtonInactiveForegroundColor = ((SolidColorBrush)this.Foreground).Color.ChangeColorContrast(60);
+                var color = ((SolidColorBrush)this.Foreground).Color;
+                if (color == Windows.UI.Color.FromArgb(255, 255, 255, 255))
+                {
+                    // So it seems that UWP has a issue with setting the foreground color to exactly white.
+                    color = Windows.UI.Color.FromArgb(255, 254, 254, 254);
+                }
+
+                titleBar.ForegroundColor = titleBar.ButtonForegroundColor = titleBar.ButtonHoverForegroundColor = titleBar.ButtonPressedForegroundColor = color;
+                titleBar.InactiveForegroundColor = titleBar.ButtonInactiveForegroundColor = color.ChangeColorContrast(80);
             }
         }
 
         void IFlyoutBehaviorObserver.OnFlyoutBehaviorChanged(FlyoutBehavior behavior)
         {
-            switch (behavior)
+            if (this.currentFlyoutBehavior != behavior)
             {
-                case FlyoutBehavior.Disabled:
-                    this.NavigationView.IsPaneToggleButtonVisible = false;
-                    this.NavigationView.IsPaneVisible = false;
-                    this.NavigationView.PaneDisplayMode = NavigationViewPaneDisplayMode.LeftMinimal;
-                    this.NavigationView.IsPaneOpen = false;
-                    break;
+                switch (behavior)
+                {
+                    case FlyoutBehavior.Disabled:
+                        this.NavigationView.IsPaneToggleButtonVisible = false;
+                        this.NavigationView.IsPaneVisible = true;
+                        this.NavigationView.PaneDisplayMode = NavigationViewPaneDisplayMode.LeftMinimal;
+                        this.NavigationView.IsPaneOpen = false;
+                        break;
 
-                case FlyoutBehavior.Flyout:
-                    this.NavigationView.IsPaneVisible = true;
-                    this.NavigationView.IsPaneToggleButtonVisible = true;
-                    var shouldOpen = this.Shell.FlyoutIsPresented;
-                    this.NavigationView.PaneDisplayMode = NavigationViewPaneDisplayMode.Auto; // This will trigger opening the flyout
-                    this.NavigationView.IsPaneOpen = shouldOpen;
-                    break;
+                    case FlyoutBehavior.Flyout:
+                        this.NavigationView.IsPaneVisible = true;
+                        this.NavigationView.IsPaneToggleButtonVisible = true;
+                        var shouldOpen = this.Shell.FlyoutIsPresented;
+                        this.NavigationView.PaneDisplayMode = NavigationViewPaneDisplayMode.Auto;
+                        this.NavigationView.IsPaneOpen = shouldOpen;
+                        break;
 
-                case FlyoutBehavior.Locked:
-                    this.NavigationView.IsPaneVisible = true;
-                    this.NavigationView.IsPaneToggleButtonVisible = false;
-                    this.NavigationView.PaneDisplayMode = NavigationViewPaneDisplayMode.Left;
-                    break;
+                    case FlyoutBehavior.Locked:
+                        this.NavigationView.IsPaneVisible = true;
+                        this.NavigationView.IsPaneToggleButtonVisible = false;
+                        this.NavigationView.PaneDisplayMode = NavigationViewPaneDisplayMode.Left;
+                        break;
+                }
+
+                this.currentFlyoutBehavior = behavior;
             }
         }
 
@@ -737,7 +754,17 @@ namespace Xam.Uwp.Shell.Renderer
             }
             else if (e.PropertyName == Shell.FlyoutIsPresentedProperty.PropertyName)
             {
-                this.NavigationView.IsPaneOpen = this.Shell.FlyoutIsPresented;
+                if (this.isPaneClosingLocked && this.NavigationView.IsPaneOpen && !this.Shell.FlyoutIsPresented)
+                {
+                    this.Shell.FlyoutIsPresented = true;
+                }
+                else
+                {
+                    this.NavigationView.IsPaneOpen = this.Shell.FlyoutIsPresented;
+                }
+
+                this.isPaneClosingLocked = false;
+
             }
             else if (e.PropertyName == Shell.FlyoutBackgroundColorProperty.PropertyName)
             {
@@ -793,9 +820,11 @@ namespace Xam.Uwp.Shell.Renderer
             this.NavigationView.Loaded -= this.OnNavigationViewLoaded;
 
             this.ButtonHolderGrid = this.NavigationView.GetDescendantOfType<Grid>("ButtonHolderGrid") as Grid;
-
+            
             if (this.ButtonHolderGrid != null)
             {
+                this.ApplyButtonsHolderBackground();
+
                 if (this.ButtonHolderGrid.GetDescendantOfType<Button>("NavigationViewBackButton") is Button backButton)
                 {
                     backButton.SetBinding(Control.ForegroundProperty, new Binding { Path = new PropertyPath("Foreground"), Source = this, RelativeSource = new RelativeSource { Mode = RelativeSourceMode.TemplatedParent } });
@@ -872,7 +901,7 @@ namespace Xam.Uwp.Shell.Renderer
                 this.Shell.FlyoutIsPresented = false;
             }
 
-            this.UpdateApplicationTitlePosition();
+            this.UpdateTopBarAppearance();
         }
 
         private void OnPaneOpening()
@@ -882,15 +911,15 @@ namespace Xam.Uwp.Shell.Renderer
                 this.Shell.FlyoutIsPresented = true;
             }
 
-            this.UpdateApplicationTitlePosition();
+            this.UpdateTopBarAppearance();
         }
 
         private void OnNavigationViewDisplayModeChanged(NavigationView sender, NavigationViewDisplayModeChangedEventArgs args)
         {
-            this.UpdateApplicationTitlePosition();
+            this.UpdateTopBarAppearance();
         }
 
-        private void UpdateApplicationTitlePosition()
+        private void UpdateTopBarAppearance()
         {
             if (this.AppTitle != null && this.NavigationView != null)
             {
@@ -898,11 +927,34 @@ namespace Xam.Uwp.Shell.Renderer
                 {
                     case NavigationViewDisplayMode.Minimal:
                         this.AppTitle.Margin = new Windows.UI.Xaml.Thickness(12, 8, 0, 0);
+                        this.ApplyButtonsHolderBackground();
+
                         break; 
                     case NavigationViewDisplayMode.Compact:
                     case NavigationViewDisplayMode.Expanded:
                         this.AppTitle.Margin = this.NavigationView.IsPaneOpen ? new Windows.UI.Xaml.Thickness(12, 8, 0, 0) : new Windows.UI.Xaml.Thickness(56, 8, 0, 0);
+                        this.ApplyButtonsHolderBackground();
                         break;
+                }
+            }
+        }
+
+        private void ApplyButtonsHolderBackground()
+        {
+            if (this.ButtonHolderGrid != null)
+            {
+                if (this.ButtonHolderGrid.Background == null)
+                {
+                    this.ButtonHolderGrid.Background = new SolidColorBrush(Windows.UI.Colors.Transparent);
+                }
+
+                if (this.Background is SolidColorBrush brush && this.NavigationView.DisplayMode == NavigationViewDisplayMode.Minimal && !this.NavigationView.IsPaneOpen)
+                {
+                    this.ButtonHolderGrid?.Background.ChangeBrushColor(brush.Color);
+                }
+                else
+                {
+                    this.ButtonHolderGrid.Background = new SolidColorBrush(Windows.UI.Colors.Transparent);
                 }
             }
         }
@@ -974,6 +1026,11 @@ namespace Xam.Uwp.Shell.Renderer
         {
             if (element != null)
             {
+                if (this.Shell.FlyoutBehavior == FlyoutBehavior.Flyout)
+                {
+                    this.isPaneClosingLocked = true;
+                }
+
                 await ((IShellController)this.Shell).OnFlyoutItemSelectedAsync(element);
             }
         }
