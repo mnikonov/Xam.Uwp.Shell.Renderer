@@ -108,12 +108,9 @@
                                         Background="{TemplateBinding Background}">
 
                                         <renderers:HorizontalScrollLoopListBox x:Name="TabBar" SelectionMode="Single"
-                                                                          ItemsSource="{Binding CurrentShellItemSection.Items, RelativeSource={RelativeSource TemplatedParent}}"
                                                                           DisplayMemberPath="Title"
                                                                           SelectedItem="{Binding CurrentShellItemSectionContent, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
                                                                           ItemContainerStyle="{StaticResource PivotLikeListBoxItemStyle}">
-                                            <!--SelectedItem="{Binding CurrentShellItemSectionContent, RelativeSource={RelativeSource TemplatedParent}}"-->
-
                                             <interactivity:Interaction.Behaviors>
                                                 <core:EventTriggerBehavior EventName="SelectionChanged">
                                                     <core:InvokeCommandAction Command="{Binding TabBarSelectionChangedCommand, RelativeSource={RelativeSource TemplatedParent}}"></core:InvokeCommandAction>

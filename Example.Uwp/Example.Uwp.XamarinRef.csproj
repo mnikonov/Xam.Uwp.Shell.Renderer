@@ -168,11 +168,16 @@
     <PackageReference Include="Xamarin.Essentials">
       <Version>1.3.1</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms">
-      <Version>4.4.0.991477</Version>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Xamarin.Forms\Xamarin.Forms.Core\Xamarin.Forms.Core.csproj">
+      <Project>{d84d8feb-b526-453b-95a3-d262d8372ca0}</Project>
+      <Name>Xamarin.Forms.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xamarin.Forms\Xamarin.Forms.Platform.UAP\Xamarin.Forms.Platform.UAP.csproj">
+      <Project>{bd90cb3c-a239-4950-ae91-719016fa074b}</Project>
+      <Name>Xamarin.Forms.Platform.UAP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Example\Example.csproj">
       <Project>{c5887843-8712-4736-8f97-5aa9e71516e9}</Project>
       <Name>Example</Name>

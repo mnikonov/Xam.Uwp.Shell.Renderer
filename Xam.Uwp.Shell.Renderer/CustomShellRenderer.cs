@@ -547,14 +547,6 @@ namespace Xam.Uwp.Shell.Renderer
             this.TabBar = this.GetTemplateChild("TabBar") as HorizontalScrollLoopListBox;
             this.AppTitle = this.GetTemplateChild("AppTitle") as TextBlock;
             
-            this.TabBar.SelectionChanged += (sender, args) =>
-                {
-                    if (args.AddedItems.Count == 0)
-                    {
-                        var binding = this.TabBar.GetBindingExpression(HorizontalScrollLoopListBox.SelectedItemProperty);
-                    }
-                };
-
             if (this.NavigationView != null)
             {
                 this.NavigationView.IsSettingsVisible = false;
@@ -670,6 +662,7 @@ namespace Xam.Uwp.Shell.Renderer
                     newShellSection.PropertyChanged += shellRenderer.OnCurrentShellItemSectionPropertyChanged;
                     ((IShellSectionController)newShellSection).NavigationRequested += shellRenderer.OnNavigationRequested;
 
+                    shellRenderer.TabBar.ItemsSource = newShellSection.Items;
                     shellRenderer.CurrentShellItemSectionContent = newShellSection.CurrentItem;
                 }
                 else
