@@ -4,7 +4,7 @@ UWP shell renderer that supports
 
 * auto menu layout
 * back navigaton
-* bindable of elements colors
+* bindable elements colors
 
 ### Setup
 
