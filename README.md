@@ -10,14 +10,20 @@ UWP shell renderer that supports
 
 1. Add the Xam.Uwp.Shell.Renderer.csproj project to your solution and reference it in UWP project
 
-2. Add the Xam.Uwp.Shell.Renderer Theme Resources to your App.xaml resources.
+2. Add the Xam.Uwp.Shell.Renderer Resources to your App.xaml.
 
+namespace declaration
 ```xaml
- <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <resources:XamUwpShellRendererResources />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
+xmlns:resources="using:Xam.Uwp.Shell.Renderer.Resources"
+```
+
+resource dictionary
+```xaml
+<Application.Resources>
+   <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+         <resources:XamUwpShellRendererResources />
+      </ResourceDictionary.MergedDictionaries>
+   </ResourceDictionary>
+</Application.Resources>
 ```
