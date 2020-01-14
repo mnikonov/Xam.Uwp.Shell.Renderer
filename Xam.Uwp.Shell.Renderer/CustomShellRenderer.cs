@@ -546,6 +546,14 @@ namespace Xam.Uwp.Shell.Renderer
             this.AutoSuggestBox = this.GetTemplateChild("AutoSuggestBox") as AutoSuggestBox;
             this.TabBar = this.GetTemplateChild("TabBar") as HorizontalScrollLoopListBox;
             this.AppTitle = this.GetTemplateChild("AppTitle") as TextBlock;
+            
+            this.TabBar.SelectionChanged += (sender, args) =>
+                {
+                    if (args.AddedItems.Count == 0)
+                    {
+                        var binding = this.TabBar.GetBindingExpression(HorizontalScrollLoopListBox.SelectedItemProperty);
+                    }
+                };
 
             if (this.NavigationView != null)
             {
