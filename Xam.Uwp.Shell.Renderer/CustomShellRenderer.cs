@@ -387,71 +387,73 @@ namespace Xam.Uwp.Shell.Renderer
 
         void IAppearanceObserver.OnAppearanceChanged(ShellAppearance appearance)
         {
-            if (appearance != null)
+            if (appearance == null || this.NavigationView == null)
             {
-                if (!appearance.BackgroundColor.IsDefault)
-                {
-                    this.Background.ChangeBrushColor(appearance.BackgroundColor.ToWindowsColor());
-                }
+                return;
+            }
 
-                if (!appearance.ForegroundColor.IsDefault)
-                {
-                    var foregroundColor = appearance.ForegroundColor.ToWindowsColor();
-                    this.Foreground.ChangeBrushColor(foregroundColor);
+            if (!appearance.BackgroundColor.IsDefault)
+            {
+                this.Background.ChangeBrushColor(appearance.BackgroundColor.ToWindowsColor());
+            }
+
+            if (!appearance.ForegroundColor.IsDefault)
+            {
+                var foregroundColor = appearance.ForegroundColor.ToWindowsColor();
+                this.Foreground.ChangeBrushColor(foregroundColor);
                     
-                    foregroundColor.ApplyToResource("TabBarSelectionHighlight");
+                foregroundColor.ApplyToResource("TabBarSelectionHighlight");
 
-                    foregroundColor.ApplyToResource("AppBarButtonForegroundPointerOver", this.NavigationView?.Resources);
-                    foregroundColor.ApplyToResource("AppBarButtonForegroundPressed", this.NavigationView?.Resources);
-                    foregroundColor.ApplyToResource("NavigationViewButtonForegroundPointerOver", this.NavigationView?.Resources);
-                    foregroundColor.ApplyToResource("NavigationViewButtonForegroundPressed", this.NavigationView?.Resources);
-                }
+                foregroundColor.ApplyToResource("AppBarButtonForegroundPointerOver", this.NavigationView.Resources);
+                foregroundColor.ApplyToResource("AppBarButtonForegroundPressed", this.NavigationView.Resources);
+                foregroundColor.ApplyToResource("NavigationViewButtonForegroundPointerOver", this.NavigationView.Resources);
+                foregroundColor.ApplyToResource("NavigationViewButtonForegroundPressed", this.NavigationView.Resources);
+            }
 
-                if (!appearance.TitleColor.IsDefault)
-                {
-                    var titleColor = appearance.TitleColor.ToWindowsColor();
-                    this.TitleForeground.ChangeBrushColor(titleColor);
+            if (!appearance.TitleColor.IsDefault)
+            {
+                var titleColor = appearance.TitleColor.ToWindowsColor();
+                this.TitleForeground.ChangeBrushColor(titleColor);
 
-                    titleColor.ApplyToResource("TabBarForegroundSelected");
-                    titleColor.ApplyToResource("TabBarForegroundSelectedPointerOver");
-                    titleColor.ApplyToResource("TabBarForegroundUnselectedPointerOver");
-                }
+                titleColor.ApplyToResource("TabBarForegroundSelected");
+                titleColor.ApplyToResource("TabBarForegroundSelectedPointerOver");
+                titleColor.ApplyToResource("TabBarForegroundUnselectedPointerOver");
+            }
 
-                if (!appearance.DisabledColor.IsDefault)
-                {
-                    var disabledColor = appearance.DisabledColor.ToWindowsColor();
-                    this.DisabledColor.ChangeBrushColor(disabledColor);
+            if (!appearance.DisabledColor.IsDefault)
+            {
+                var disabledColor = appearance.DisabledColor.ToWindowsColor();
+                this.DisabledColor.ChangeBrushColor(disabledColor);
 
-                    disabledColor.ApplyToResource("TabBarForegroundDisabled");
-                }
+                disabledColor.ApplyToResource("TabBarForegroundDisabled");
+            }
 
-                if (!appearance.UnselectedColor.IsDefault)
-                {
-                    var unselectedColor = appearance.UnselectedColor.ToWindowsColor();
-                    this.UnselectedColor.ChangeBrushColor(unselectedColor);
+            if (!appearance.UnselectedColor.IsDefault)
+            {
+                var unselectedColor = appearance.UnselectedColor.ToWindowsColor();
+                this.UnselectedColor.ChangeBrushColor(unselectedColor);
 
-                    unselectedColor.ApplyToResource("TabBarForegroundUnselected");
-                }
+                unselectedColor.ApplyToResource("TabBarForegroundUnselected");
+            }
 
-                if (!appearance.TabBarBackgroundColor.IsDefault)
-                {
-                    this.TabBarBackground.ChangeBrushColor(appearance.TabBarBackgroundColor.ToWindowsColor());
-                }
+            if (!appearance.TabBarBackgroundColor.IsDefault)
+            {
+                this.TabBarBackground.ChangeBrushColor(appearance.TabBarBackgroundColor.ToWindowsColor());
+            }
 
-                if (!appearance.TabBarForegroundColor.IsDefault)
-                {
-                    this.TabBarForeground.ChangeBrushColor(appearance.TabBarForegroundColor.ToWindowsColor());
-                }
+            if (!appearance.TabBarForegroundColor.IsDefault)
+            {
+                this.TabBarForeground.ChangeBrushColor(appearance.TabBarForegroundColor.ToWindowsColor());
+            }
 
-                if (!appearance.TabBarUnselectedColor.IsDefault)
-                {
-                    this.TabBarUnselectedColor.ChangeBrushColor(appearance.TabBarUnselectedColor.ToWindowsColor());
-                }
+            if (!appearance.TabBarUnselectedColor.IsDefault)
+            {
+                this.TabBarUnselectedColor.ChangeBrushColor(appearance.TabBarUnselectedColor.ToWindowsColor());
+            }
 
-                if (!appearance.TabBarTitleColor.IsDefault)
-                {
-                    this.TabBarTitleForeground.ChangeBrushColor(appearance.TabBarTitleColor.ToWindowsColor());
-                }
+            if (!appearance.TabBarTitleColor.IsDefault)
+            {
+                this.TabBarTitleForeground.ChangeBrushColor(appearance.TabBarTitleColor.ToWindowsColor());
             }
 
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;

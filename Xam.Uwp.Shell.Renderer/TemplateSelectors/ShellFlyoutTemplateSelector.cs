@@ -27,9 +27,9 @@
         {
             switch (item)
             {
-                case BaseShellItem shellItem:
+                case BaseShellItem _:
                     return this.BaseShellItemTemplate;
-                case MenuItem menuItem:
+                case MenuItem _:
                     return this.MenuItemTemplate;
                 case null:
                     return this.SeparatorTemplate;
