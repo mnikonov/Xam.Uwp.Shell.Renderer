@@ -10,7 +10,7 @@
 
     #endregion
 
-    internal static class ColorExtensions
+    public static class ColorExtensions
     {
         #region Public Methods
 
